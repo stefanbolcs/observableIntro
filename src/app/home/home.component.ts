@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {interval, Subscription,Observable} from 'rxjs';
+import {map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,17 @@ export class HomeComponent implements OnInit , OnDestroy{
       },1000);
     } );
 
-    this.firstObsSubscription=customIntervalObservable.subscribe(data=>{
+    //academind.com
+    //pipe operator to modify before the obervable delivers to its observers
+    // in the pipe chan filter if return true map and subscription happens, if it returns false nor map nor subscription happens
+
+    this.firstObsSubscription=customIntervalObservable.pipe(filter(
+      data=>{
+        return data>0;
+      }
+    ),map( (data:number) =>{
+      return 'Round: '+(data + 1);
+          })).subscribe(data=>{
       console.log(data);
     }, error =>{
       console.log(error);
